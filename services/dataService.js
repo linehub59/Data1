@@ -37,27 +37,27 @@ exports.getDataById = async (id) => {
 
 
 exports.updateDataById = async (id, data) => {
-
-  const doc = await collection.doc(id).get();
+  const dataRef = collection.doc(id);
+  const doc = await dataRef.get();
 
   // Check if product exists
   if (!doc.exists) {
     return {
-      message: "Product not found"
+      message: "data not found"
     };
   }
 
   // Update product
-  await productRef.update({
+  await dataRef.update({
     ...data,
     updatedAt: new Date()
   });
 
-  const updatedDoc = await productRef.get();
+  const updatedDoc = await dataRef.get();
 
   return {
-    message: "Product updated successfully",
-    product: updatedDoc.data()
+    id: id,
+    ...updatedDoc.data()
   };
 };
 
